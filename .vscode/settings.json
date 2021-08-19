@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "*.S": "avr",
+        "roots.h": "c"
+    }
+}
