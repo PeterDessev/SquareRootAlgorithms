@@ -1,0 +1,1 @@
+float floatingPoint(float input);
