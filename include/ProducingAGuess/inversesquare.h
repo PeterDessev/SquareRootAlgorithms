@@ -1,1 +1,0 @@
-float inverseSquare(float input);
