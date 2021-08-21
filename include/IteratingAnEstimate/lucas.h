@@ -1,0 +1,1 @@
+float lucas(float input);

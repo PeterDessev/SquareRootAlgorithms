@@ -1,7 +1,7 @@
-#include "IteratingAGuess/goldschmidt.h"
-#include "IteratingAGuess/lucas.h"
-#include "IteratingAGuess/newton.h"
-#include "IteratingAGuess/halley.h"
+#include "IteratingAnEstimate/goldschmidt.h"
+#include "IteratingAnEstimate/lucas.h"
+#include "IteratingAnEstimate/newton.h"
+#include "IteratingAnEstimate/halley.h"
 
-#include "ProducingAGuess/floatingpoint.h"
-#include "ProducingAGuess/inversesquare.h"
+#include "ProducingAnEstimate/floatingpoint.h"
+#include "ProducingAnEstimate/inverseSquare.h"
