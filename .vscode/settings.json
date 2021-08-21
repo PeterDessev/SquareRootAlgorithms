@@ -1,6 +1,10 @@
 {
     "files.associations": {
         "*.S": "avr",
-        "roots.h": "c"
+        "roots.h": "c",
+        "goldschmidt.h": "c",
+        "inversesquare.h": "c",
+        "floatingpoint.h": "c",
+        "newton.h": "c"
     }
 }
