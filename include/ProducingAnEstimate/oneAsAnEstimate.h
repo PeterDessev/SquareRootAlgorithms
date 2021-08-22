@@ -1,0 +1,1 @@
+float oneAsAnEstimate(float input);
