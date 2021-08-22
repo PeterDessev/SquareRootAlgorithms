@@ -1,10 +1,10 @@
 {
     "files.associations": {
-        "*.S": "avr",
         "roots.h": "c",
         "goldschmidt.h": "c",
         "inversesquare.h": "c",
         "floatingpoint.h": "c",
-        "newton.h": "c"
+        "newton.h": "c",
+        "inputover.h": "c"
     }
 }
