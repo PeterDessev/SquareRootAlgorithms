@@ -5,3 +5,5 @@
 
 #include "ProducingAnEstimate/floatingpoint.h"
 #include "ProducingAnEstimate/inverseSquare.h"
+#include "ProducingAnEstimate/inputOver.h"
+#include "ProducingAnEstimate/oneAsAnEstimate.h"
