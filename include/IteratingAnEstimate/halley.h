@@ -1,3 +1,3 @@
-float halley(float input);
+float halley(float input, float estimate);
 
-float halleyInverse(float input);
+float halleyInverse(float input, float estimate);

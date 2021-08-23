@@ -1,3 +1,3 @@
-float goldschmidt(float input);
+float goldschmidt(float input, float estimate);
 
-float goldschmidtInverse(float input);
+float goldschmidtInverse(float input, float estimate);
