@@ -1,9 +1,8 @@
-#include <stdio.h>
 #include <stdint.h>
 
 #include "ProducingAnEstimate/floatingpoint.h"
 
-static union { float f; uint32_t i; } val = {16};	/* Convert type, preserving bit pattern */	
+static union { float f; uint32_t i; } val;
 
 float floatingPoint(float input){
     // The original algorithm found in wikipedia, 
@@ -16,7 +15,6 @@ float floatingPoint(float input){
     // printf("%f\n", val.f);
 
     val.f = input;
-    val.i >>= 1;
-    val.i += 0b1111111 << 22; //(((1 << 23) * 127) / 2);
+    val.i = 0x1FC00000 + (val.i >> 1);
     return val.f;
 }

@@ -4,30 +4,35 @@
 
 #include "IteratingAnEstimate/goldschmidt.h"
 
-int main(){
-    double S, Y, R, G, H;
-    int J = 0;
+float goldschmidt(float input, float estimate){
+    double R, G, H, check;
 
-    for(double i = 1E-10; i < 1E10; i *= 10){
-        S = i;
-        Y = S >= 1 ? 1 / (2 * S) : 2 * S;
-        G = S * Y;
-        H = Y / 2;
-        J = 0;
+    G = input * estimate;
+    H = estimate / 2;
 
-        while(((G * G) / S) < 0.9999){
-            R = 0.5 - G * H;
-            G = G + G * R;
-            H = H + H * R;
-            J++;
-        }
-
-        printf("%lf: %d\n", S, J);
-
-        //if(((G * G) / S) < 0.9999)
-            //printf("G * G: %lf, / S: %lf\n", G * G, (G * G) / S);
-        //printf("i: %llf, G ^ 2: %llf, 2H: %llf\n", i, G * G, 2 * H);
+    while(check < 0.9999f || check > 1.0001f){
+        R = 0.5 - G * H;
+        G = G + G * R;
+        H = H + H * R;
+        check = (G * G) / input;
     }
 
-    return 0;
+    return G;
+}
+
+float goldschmidtInverse(float input, float estimate){
+    double R, G, H, check;
+
+    G = input * estimate;
+    H = estimate / 2;
+
+    while(check < 0.9999f || check > 1.0001f){
+        R = 0.5f - G * H;
+        G = G + G * R;
+        H = H + H * R;
+
+        check = (4.0f * H * H) * input;
+    }
+
+    return 2 * H;
 }
