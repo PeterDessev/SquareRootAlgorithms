@@ -27,12 +27,12 @@ int main(){
 
     char* iterNames[] = {
         "Goldschmidt",
-        "lucas",
         "newton",
         "halley"
     };
 
     // Array of functions for producing a guess
+    int prodCount = 4;
     int(* producing[]) (float input) = {
         inputOver,
         oneAsAnEstimate,
@@ -40,14 +40,13 @@ int main(){
         inverseSquare
     };
 
-    // Array of functions for iterating a guess     
+    // Array of functions for iterating a guess
+    int iterCount = 3; 
     int(* iterating[]) (float input, float estimate) = {
         goldschmidt,
-        lucas,
         newton,
         halley,
         goldschmidtInverse,
-        lucasInverse,
         newtonInverse,
         halleyInverse
     };
@@ -55,9 +54,9 @@ int main(){
 
     // Begin testing
     // First loop to iterate through producing an estimate
-    for(int prodIndex = 0; prodIndex < 4; prodIndex++){
+    for(int prodIndex = 0; prodIndex < prodCount; prodIndex++){
         // Second loop to iterate through iterating on an estimate
-        for(int iterIndex = 0; iterIndex < 4; iterIndex++){
+        for(int iterIndex = 0; iterIndex < iterCount; iterIndex++){
             // Third loop dictates what number to find the square root of
             for(float input = 1E-10; input < 1E10; input *= 10){
 #ifdef DEBUG

@@ -10,8 +10,8 @@ typedef struct __lucasSeries{
     long double preprevious;
 } lucasSeries;
 
-float lucas(float input, float estimate){
-    lucasSeries* test;
+float lucas(float input){
+    static lucasSeries* test;
     double result, check, P, Q;
 
     test->current = 1;
@@ -38,7 +38,6 @@ float lucas(float input, float estimate){
     return result;
 }
 
-float lucasInverse(float input, float estimate){
-    printf("LUCAS INVERSE NOT YET IMPLEMENTED\n");
-    return 0.0f;
+float lucasInverse(float input){
+    return 1 / lucas(input);
 }
