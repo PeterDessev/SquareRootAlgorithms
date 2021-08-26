@@ -27,33 +27,31 @@ typedef struct __lucasSeries{
 
 int main(){
     lucasSeries* test;
-    unsigned long int count;
     double result, check, P, Q;
 
-    for(double i = 1E-10; i < 1E10; i *= 10){
-        test->current = 1;
-        test->previous = 0;
-        P = 2;
-        Q = 1 - i;
-        count = 0;
-        check = 0;
+    double number = 64.0f;
 
-        while(check < 0.9999 || check > 1.0001){
-            count++;
-            test->preprevious = test->previous;
-            test->previous = test->current;
-            test->current = P * test->previous - Q * test->preprevious;
+    test->current = 1;
+    test->previous = 0;
+    P = 2;
+    Q = 1.0f - number;
+    check = 0;
 
-            if(test->current > 1E5){
-                test->current /= 1 << 30;
-                test->previous /= 1 << 30;
-            }
+    while(check < 0.9999 || check > 1.0001){
+        test->preprevious = test->previous;
+        test->previous = test->current;
+        test->current = P * test->previous - Q * test->preprevious;
 
-            result = test->current / test->previous - 1;
-            check = (result * result) / i;
+        // Prevent double overflow
+        if(test->current > 1E5){
+            test->current /= 1 << 30;
+            test->previous /= 1 << 30;
         }
-        printf("%lf: %d\n", result * result, count);
-    }
 
+        result = test->current / test->previous - 1;
+        check = (result * result) / number;
+    }
+    
+    printf("%lf\n", result);
     return 0;
 }

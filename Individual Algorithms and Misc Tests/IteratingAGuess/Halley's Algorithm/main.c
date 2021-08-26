@@ -4,7 +4,7 @@ void regular();
 void inverse();
 
 int main(){
-    
+    regular();
     return 0;
 }
 
