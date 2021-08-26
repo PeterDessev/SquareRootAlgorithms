@@ -1,27 +1,27 @@
-COMPILER = clang
+CC = clang
 
-CFLAGS   = -Iinclude/IteratingAnEstimate -Iinclude/ProducingAnEstimate -DDEBUG_LEVEL=0
-OBJECTS  = src/IteratingAnEstimate/goldschmidt.c\
-		   src/IteratingAnEstimate/halley.c\
-		   src/IteratingAnEstimate/lucas.c\
-		   src/IteratingAnEstimate/newton.c\
+CFLAGS = -Iinclude/ -DDEBUG_LEVEL=0 -Wno-unknown-pragmas
+SOURCE = src/IteratingAnEstimate/goldschmidt.c\
+		 src/IteratingAnEstimate/halley.c\
+		 src/IteratingAnEstimate/lucas.c\
+		 src/IteratingAnEstimate/newton.c\
 \
-		   src/ProducingAnEstimate/floatingpoint.c\
-		   src/ProducingAnEstimate/inputOver.c\
-		   src/ProducingAnEstimate/inverseSquare.c\
-		   src/ProducingAnEstimate/oneAsAnEstimate.c\
-		   main.o
+	     src/ProducingAnEstimate/floatingpoint.c\
+	     src/ProducingAnEstimate/inputOver.c\
+		 src/ProducingAnEstimate/inverseSquare.c\
+		 src/ProducingAnEstimate/oneAsAnEstimate.c\
+		 main.c
 
-COMPILE  = $(COMPILER) -Wall $(CFLAGS)
+OBJECTS = $(SOURCE:.c=.o)
 
-program: build 
+COMPILE = $(CC) -Wall $(CFLAGS)
+OUTPUT = squareRoots
 
-
-build: 
-	$(AVRDUDE) $(OBJECTS)
+all: $(OBJECTS)
+	$(COMPILE) $(OBJECTS) -o $(OUTPUT)
 
 clean:
-	rm -f src/IteratingAnEstimate/*.o src/ProducingAnEstimate/*.o
+	rm -f $(OBJECTS)
 
-.c.o:
-	$(COMPILE) -c $< -o $@ -Wno-unknown-pragmas
+%.o : %.c
+	$(CC) -c $(CFLAGS) $< -o $@
