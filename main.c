@@ -33,7 +33,7 @@ int main(){
 
     // Array of functions for producing a guess
     int prodCount = 4;
-    int(* producing[]) (float input) = {
+    float(* producing[]) (float input) = {
         inputOver,
         oneAsAnEstimate,
         floatingPoint,
@@ -42,7 +42,7 @@ int main(){
 
     // Array of functions for iterating a guess
     int iterCount = 3; 
-    int(* iterating[]) (float input, float estimate) = {
+    float(* iterating[]) (float input, float estimate) = {
         goldschmidt,
         newton,
         halley,
@@ -66,15 +66,15 @@ int main(){
                 // a different set of functions is required to itareate over. They are contained in the
                 // iterating function pointer array, but with an offset of 4 from their non-inverted counterparts
                 int trueIterIndex = prodIndex == 3 ? iterIndex + 4 : iterIndex;
-                int(* producer)(float) = producing[prodIndex];
-                int(* iterator)(float) = iterating[trueIterIndex];
+                float(* producer)(float) = producing[prodIndex];
+                float(* iterator)(float input, float estimate) = iterating[trueIterIndex];
 
                 // Start time
                 time(&beginBenchmark);
 
                 for(int count = 0; count < benchmarkCount; count++){
                     float estimate = (*producer) (input);
-                    float result = (*iterator) (estimate);
+                    float result = (*iterator) (input, estimate);
                 }
                 
                 // End time
