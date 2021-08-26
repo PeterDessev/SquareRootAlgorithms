@@ -1,3 +1,3 @@
-float lucas(float input, float estimate);
+float lucas(float input);
 
-float lucasInverse(float input, float estimate);
+float lucasInverse(float input);

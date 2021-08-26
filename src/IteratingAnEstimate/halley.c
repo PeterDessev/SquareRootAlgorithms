@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #include "IteratingAnEstimate/halley.h"
 
 float halley(float input, float estimate){

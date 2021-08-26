@@ -1,5 +1,5 @@
 #include "ProducingAnEstimate/oneAsAnEstimate.h"
 
-float oneAsAGuess(float input){
+float oneAsAnEstimate(float input){
     return 1;
 }
