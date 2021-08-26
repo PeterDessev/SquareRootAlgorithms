@@ -7,7 +7,7 @@ float newton(float input, float estimate){
 
     while(check < 0.9999 || check > 1.0001){
         estimate = 0.5f * estimate + (input / (2 * estimate));
-        check = (estimate * estimate) * input;
+        check = (estimate * estimate) / input;
     }
 
     return estimate;
