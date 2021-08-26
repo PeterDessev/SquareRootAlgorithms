@@ -8,6 +8,7 @@
         "newton.h": "c",
         "inputover.h": "c",
         "lucas.h": "c",
-        "halley.h": "c"
+        "halley.h": "c",
+        "oneasanestimate.h": "c"
     }
 }
