@@ -13,6 +13,43 @@
 #include "include/roots.h"
 
 #define DEBUG 0
+// Array of functions for producing a guess
+static int prodSize = 4;
+static float(* producing[]) (float input) = {
+    inputOver,
+    oneAsAnEstimate,
+    floatingPoint,
+    inverseSquare
+};
+
+// Array of functions for iterating a guess
+static int iterSize = 3; 
+static float(* iterating[]) (float input, float estimate) = {
+    goldschmidt,
+    newton,
+    halley,
+    goldschmidtInverse,
+    newtonInverse,
+    halleyInverse
+};
+
+
+// These two arrays are used to easily convert 
+// between the index for the address of a function
+// and its actual name for printing purposes
+static char* prodNames[] = {
+"Input Over S",
+"One As An Estimate",
+"Floating Point",
+"Reciprocal Floating Point"
+};
+static char* iterNames[] = {
+"Goldschmidt",
+"Newton",
+"Halley"
+};
+
+static void printResults(long int results[prodSize][iterSize][21]);
 
 int main(){
     time_t beginBenchmark;
@@ -25,51 +62,15 @@ int main(){
     // to compute as many square roots as possible
     static const double benchmarkTime = 0.1;
 
-    // These two arrays are used to easily convert 
-    // between the index for the address of a function
-    // and its actual name for printing purposes
-    char* prodNames[] = {
-        "Input Over S",
-        "One As An Estimate",
-        "Floating Point",
-        "Reciprocal Floating Point"
-    };
-
-    char* iterNames[] = {
-        "Goldschmidt",
-        "Newton",
-        "Halley"
-    };
-
-    // Array of functions for producing a guess
-    int prodCount = 4;
-    float(* producing[]) (float input) = {
-        inputOver,
-        oneAsAnEstimate,
-        floatingPoint,
-        inverseSquare
-    };
-
-    // Array of functions for iterating a guess
-    int iterCount = 3; 
-    float(* iterating[]) (float input, float estimate) = {
-        goldschmidt,
-        newton,
-        halley,
-        goldschmidtInverse,
-        newtonInverse,
-        halleyInverse
-    };
-
     // This array stores the results of the benchmark
-    long int results[prodCount][iterCount][21];
+    long int results[prodSize][iterSize][21];
 
 
     // Begin testing
     // First loop to iterate through producing an estimate
-    for(int prodIndex = 0; prodIndex < prodCount; prodIndex++){
+    for(int prodIndex = 0; prodIndex < prodSize; prodIndex++){
         // Second loop to iterate through iterating on an estimate
-        for(int iterIndex = 0; iterIndex < iterCount; iterIndex++){
+        for(int iterIndex = 0; iterIndex < iterSize; iterIndex++){
             // Helper for storing results, more reliable than log10(input)
             int inputIndex = 0; 
 
@@ -138,5 +139,17 @@ int main(){
             }
         }
     }
+    printResults(results);
     return 0;
+}
+
+void printResults(long int results[prodSize][iterSize][21]){
+    for(int prods = 0; prods < prodSize; prods++){
+        for(int iters = 0; iters < iterSize; iters++){
+            for(int oom = 0; oom < 21; oom++){
+                double input = pow(10, (double)(oom - 10));
+                printf("%c with %c (%.2e): %ld\n", prodNames[prods][0], iterNames[iters][0], input, results[prods][iters][oom]);
+            }
+        }
+    }
 }
