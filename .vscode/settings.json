@@ -9,6 +9,7 @@
         "inputover.h": "c",
         "lucas.h": "c",
         "halley.h": "c",
-        "oneasanestimate.h": "c"
+        "oneasanestimate.h": "c",
+        "math.h": "c"
     }
 }
