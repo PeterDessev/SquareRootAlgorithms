@@ -1,6 +1,6 @@
 CC = clang
 
-CFLAGS = -Iinclude/ -Wno-unknown-pragmas
+CFLAGS = -Iinclude/ -Wno-unknown-pragmas -lm
 SOURCE = src/IteratingAnEstimate/goldschmidt.c\
 		 src/IteratingAnEstimate/halley.c\
 		 src/IteratingAnEstimate/lucas.c\
