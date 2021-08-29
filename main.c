@@ -13,9 +13,10 @@
 #include "include/roots.h"
 
 #define DEBUG 0
+
 // Array of functions for producing a guess
-static int prodSize = 4;
-static float(* producing[]) (float input) = {
+#define prodSize 4
+static float(* producing[prodSize]) (float input) = {
     inputOver,
     oneAsAnEstimate,
     floatingPoint,
@@ -23,8 +24,8 @@ static float(* producing[]) (float input) = {
 };
 
 // Array of functions for iterating a guess
-static int iterSize = 3; 
-static float(* iterating[]) (float input, float estimate) = {
+#define iterSize 3 
+static float(* iterating[iterSize * 2]) (float input, float estimate) = {
     goldschmidt,
     newton,
     halley,
@@ -37,13 +38,13 @@ static float(* iterating[]) (float input, float estimate) = {
 // These two arrays are used to easily convert 
 // between the index for the address of a function
 // and its actual name for printing purposes
-static char* prodNames[] = {
+static const char* prodNames[] = {
 "Input Over S",
 "One As An Estimate",
 "Floating Point",
 "Reciprocal Floating Point"
 };
-static char* iterNames[] = {
+static const char* iterNames[] = {
 "Goldschmidt",
 "Newton",
 "Halley"
