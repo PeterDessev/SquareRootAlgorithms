@@ -108,14 +108,14 @@ int main(){
                 timersub(&tval_after, &tval_before, &tval_result);
 
                 timeSpent = (double)(long)tval_result.tv_sec + 
-                    ((double)(long)tval_result.tv_usec )/ (double)1000000;
+                    ((double)(long)tval_result.tv_usec) / (double)1000000;
 
                 while(timeSpent < benchmarkTime){
                     gettimeofday(&tval_after, NULL);
                     timersub(&tval_after, &tval_before, &tval_result);
                     
                     timeSpent = (double)(long)tval_result.tv_sec + 
-                        ((double)(long)tval_result.tv_usec )/ (double)1000000;
+                        ((double)(long)tval_result.tv_usec) / (double)1000000;
 
 #else // ifdef IS_UNIX 
                 // Start time
