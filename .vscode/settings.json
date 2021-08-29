@@ -11,5 +11,6 @@
         "halley.h": "c",
         "oneasanestimate.h": "c",
         "math.h": "c"
-    }
+    },
+    "C_Cpp.errorSquiggles": "Enabled"
 }
