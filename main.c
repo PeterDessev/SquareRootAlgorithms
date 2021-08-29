@@ -1,4 +1,4 @@
-// Detect if is being compiled on unix
+// Detect if is being compiled on unix or unix-like system
 #if !defined(_WIN32) && (defined(__unix__) || defined(__unix) || (defined(__APPLE__) && defined(__MACH__)))
 #define IS_UNIX
 #endif
@@ -53,6 +53,10 @@ static const char* iterNames[] = {
 static void printResults(long int results[prodSize][iterSize][21]);
 
 int main(){
+#ifndef IS_UNIX
+    printf("Unable to locate posix libraries, tests will now each take a whole number of seconds each to finish\n");
+#endif
+
     time_t beginBenchmark;
     time_t endBenchmark;
 
