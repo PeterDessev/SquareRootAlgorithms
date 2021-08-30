@@ -67,6 +67,7 @@ int main(){
     // to compute as many square roots as possible
     static const double benchmarkTime = 0.1;
 
+    printf("Unable to locate posix libraries, tests will now each take a whole number of seconds each to finish instead of %g seconds\n", benchmarkTime);
     // This array stores the results of the benchmark
     long int results[prodSize][iterSize][21];
 
@@ -90,8 +91,10 @@ int main(){
 #if DEBUG >= 2
             printf("%s with %s:\n", prodNames[prodIndex], iterNames[iterIndex]);
 #endif // DEBUG >= 2
+
             // Third loop dictates what number to find the square root of
             for(float input = 1E-10; input < 1E10; input *= 10){
+
 #if DEBUG >= 3
                 printf("Testing %s with %s, calculating the square root of %f for %f seconds...\n", prodNames[prodIndex], iterNames[iterIndex], input, benchmarkTime);
 #endif // DEBUG >= 3
@@ -126,7 +129,7 @@ int main(){
                     float estimate = (*producer) (input);
                     float result = (*iterator) (input, estimate);
                     count++;
-                }
+                } // while(difftime ...
                 results[prodIndex][iterIndex][inputIndex++] = count;
 
 #if DEBUG >= 1
@@ -141,10 +144,10 @@ int main(){
 #if DEBUG >= 2
                 printf("%c with %c on %.1e: %ld\n", prodNames[prodIndex][0], iterNames[iterIndex][0], input, count);
 #endif // if DEBUG >= 2
-            }
-        }
-    }
-    printResults(results);
+            } // for(float input = 1E-10 ...
+        } // for(int iterIndex = 0 ...
+    } // for(int prodIndex = 0 ...
+
     return 0;
 }
 
