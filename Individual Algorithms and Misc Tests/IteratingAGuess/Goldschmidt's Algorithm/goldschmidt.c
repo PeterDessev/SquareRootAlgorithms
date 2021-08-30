@@ -3,27 +3,27 @@
 #include <math.h>
 
 int main(){
-    double S, Y, R, G, H;
-    int J = 0;
+    double input, estimate, R, G, H;
+    int count = 0;
 
-    for(double i = 1E-10; i < 1E10; i *= 10){
-        S = i;
-        Y = S >= 1 ? 1 / (2 * S) : 2 * S;
-        G = S * Y;
-        H = Y / 2;
-        J = 0;
+    for(double i = 1; i < 100; i++){
+        input = i * i;
+        estimate = 1;
+        G = input * estimate;
+        H = estimate / 2;
+        count = 0;
 
-        while(((G * G) / S) < 0.9999){
+        while(((G * G) / input) < 0.9999){
             R = 0.5 - G * H;
             G = G + G * R;
             H = H + H * R;
-            J++;
+            count++;
         }
 
-        printf("%lf: %d\n", S, J);
+        printf("%lf: %lf\n", input, G);
 
-        //if(((G * G) / S) < 0.9999)
-            //printf("G * G: %lf, / S: %lf\n", G * G, (G * G) / S);
+        //if(((G * G) / input) < 0.9999)
+            //printf("G * G: %lf, / input: %lf\n", G * G, (G * G) / input);
         //printf("i: %llf, G ^ 2: %llf, 2H: %llf\n", i, G * G, 2 * H);
     }
 
