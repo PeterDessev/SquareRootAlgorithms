@@ -51,6 +51,10 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
+# Ouput files from compilation or execution or LibreOffice
 squareRoots
-
 *.txt
+*.csv
+*.csv#
+*.ods
+*.ods#
