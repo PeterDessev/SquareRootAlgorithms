@@ -51,23 +51,20 @@ static const char* iterNames[] = {
 };
 
 static void printResults(long int results[prodSize][iterSize][21]);
+static void printCSV(long int results[prodSize][iterSize][21]);
 
 int main(){
-#ifndef IS_UNIX
-    printf("Unable to locate posix libraries, tests will now each take a whole number of seconds each to finish\n");
-#endif
-
-    time_t beginBenchmark;
-    time_t endBenchmark;
-
-    double seconds;
-
     // This variable controls how mnay seconds the 
     // program will give each permutation of algorithms
     // to compute as many square roots as possible
     static const double benchmarkTime = 0.1;
 
+#ifndef IS_UNIX
     printf("Unable to locate posix libraries, tests will now each take a whole number of seconds each to finish instead of %g seconds\n", benchmarkTime);
+#endif
+
+    time_t beginBenchmark;
+
     // This array stores the results of the benchmark
     long int results[prodSize][iterSize][21];
 
@@ -123,13 +120,18 @@ int main(){
 #else // ifdef IS_UNIX 
                 // Start time
                 time(&beginBenchmark);
-
+                float estimate, result;
                 while(difftime(time(NULL), beginBenchmark) < benchmarkTime){
 #endif // ifdef IS_UNIX 
-                    float estimate = (*producer) (input);
-                    float result = (*iterator) (input, estimate);
+
+                    estimate = (*producer) (input);
+                    result = (*iterator) (input, estimate);
                     count++;
                 } // while(difftime ...
+
+                //if(((result * result) / input) > 0.01f)
+                    printf("%s with %s for %.2e: %.2e (%.2e)\n", prodNames[prodIndex], iterNames[iterIndex], input, result, prodIndex != 3 ? (result * result) : ((1 / result) * (1 / result)));
+                
                 results[prodIndex][iterIndex][inputIndex++] = count;
 
 #if DEBUG >= 1
@@ -148,6 +150,9 @@ int main(){
         } // for(int iterIndex = 0 ...
     } // for(int prodIndex = 0 ...
 
+    // Output results
+    printCSV(results);
+    // printResults(results);
     return 0;
 }
 
@@ -160,4 +165,37 @@ void printResults(long int results[prodSize][iterSize][21]){
             }
         }
     }
+}
+
+
+void printCSV(long int results[prodSize][iterSize][21]){
+    FILE* csv;
+    csv = fopen("output.csv", "w+");
+
+    // Corner Cell empty
+    fputs(",", csv);
+
+    // Print out column headers
+    for(int prods = 0; prods < prodSize; prods++){
+        for(int iters = 0; iters < iterSize; iters++){
+            fprintf(csv, "%s with %s,", prodNames[prods], iterNames[iters]);
+        }
+    }
+    fputs("\n", csv);
+
+    // Print row headers and data
+    for(int oom = 0; oom < 21; oom++){
+        // Print row header
+        double header = pow(10, (double)(oom - 10));
+        fprintf(csv, "%.2e,", header);
+        
+        // Print data
+        for(int prods = 0; prods < prodSize; prods++){
+            for(int iters = 0; iters < iterSize; iters++){
+                fprintf(csv, "%ld,", results[prods][iters][oom]);
+            }
+        }
+        fputs("\n", csv);
+    }
+    fclose(csv);
 }
