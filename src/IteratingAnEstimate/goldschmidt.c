@@ -7,6 +7,7 @@
 float goldschmidt(float input, float estimate){
     double R, G, H, check;
 
+    estimate = 1 / estimate;
     G = input * estimate;
     H = estimate / 2;
 
