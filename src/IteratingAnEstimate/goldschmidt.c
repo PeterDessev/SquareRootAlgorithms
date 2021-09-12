@@ -19,7 +19,7 @@ float goldschmidt(float input, float estimate){
         check = (G * G) / input;
         count++;
     }
-    if(count == 99)
+    if(count == 99 || isnan(G) || isinf(G))
         return -1;
     
     return G;
