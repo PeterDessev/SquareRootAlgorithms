@@ -220,7 +220,10 @@ void printCSV(long int results[PROD_SIZE][ITER_SIZE][TEST_OOM_RANGE][TEST_DIGIT_
             // Print data
             for(int prods = 0; prods < PROD_SIZE; prods++){
                 for(int iters = 0; iters < ITER_SIZE; iters++){
-                    fprintf(csv, "%ld,", results[prods][iters][OOM + ((TEST_OOM_RANGE - 1) / 2)][digit]);
+                    long result = results[prods][iters][OOM + ((TEST_OOM_RANGE - 1) / 2)][digit];
+                    if(result != -1)
+                        fprintf(csv, "%ld", result);
+                    fprintf(csv, ",");
                 }
             }
             fputs("\n", csv);
