@@ -5,6 +5,7 @@
 #include "ProducingAnEstimate/oneAsAnEstimate.h"
 
 // Iterating algorithms
+#include "IteratingAnEstimate/babylonian.h"
 #include "IteratingAnEstimate/goldschmidt.h"
 #include "IteratingAnEstimate/lucas.h"
 #include "IteratingAnEstimate/newton.h"
