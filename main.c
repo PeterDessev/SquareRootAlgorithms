@@ -15,8 +15,8 @@
 #define DEBUG 0
 
 // Array of functions for producing a guess
-#define prodSize 4
-static float(* producing[prodSize]) (float input) = {
+#define PROD_SIZE 4
+static float(* producing[PROD_SIZE]) (float input) = {
     inputOver,
     oneAsAnEstimate,
     floatingPoint,
@@ -24,16 +24,36 @@ static float(* producing[prodSize]) (float input) = {
 };
 
 // Array of functions for iterating a guess
-#define iterSize 3 
-static float(* iterating[iterSize * 2]) (float input, float estimate) = {
+#define ITER_SIZE 4 
+static float(* iterating[ITER_SIZE * 2]) (float input, float estimate) = {
+    babylonian,
     goldschmidt,
     newton,
     halley,
+    babylonianInverse,
     goldschmidtInverse,
     newtonInverse,
     halleyInverse
 };
 
+
+// Fine control over the testing range in a log friendly way
+// NOTE: The program has not been tested with any values other than these
+// and is not constructed in a way that accounts for user modification,
+// change at your own risk!!
+// TEST_OOM_RANGE controls how many orders of magnitude (centered at 0)
+// the test will cover. Must be odd, even numbers have not been tested
+#define TEST_OOM_RANGE 21
+
+// TEST_DIGIT_RANGE controls how many evenly spaced digits will be tested 
+// within each order of magnitude, preferably a multiple of 10
+#define TEST_DIGIT_RANGE 10
+
+
+// This variable controls how mnay seconds the 
+// program will give each permutation of algorithms
+// to compute as many square roots as possible
+#define BENCHMARK_TIME 0.1f
 
 // These two arrays are used to easily convert 
 // between the index for the address of a function
@@ -45,38 +65,33 @@ static const char* prodNames[] = {
 "Reciprocal Floating Point"
 };
 static const char* iterNames[] = {
+"Babylonian",
 "Goldschmidt",
 "Newton",
 "Halley"
 };
 
-static void printResults(long int results[prodSize][iterSize][21]);
-static void printCSV(long int results[prodSize][iterSize][21]);
+static void printResults(long int results[PROD_SIZE][ITER_SIZE][TEST_OOM_RANGE][TEST_DIGIT_RANGE]);
+static void printCSV(long int results[PROD_SIZE][ITER_SIZE][TEST_OOM_RANGE][TEST_DIGIT_RANGE]);
 
 int main(){
-    // This variable controls how mnay seconds the 
-    // program will give each permutation of algorithms
-    // to compute as many square roots as possible
-    static const double benchmarkTime = 0.1;
+
 
 #ifndef IS_UNIX
-    printf("Unable to locate posix libraries, tests will now each take a whole number of seconds each to finish instead of %g seconds\n", benchmarkTime);
+    printf("Unable to locate posix libraries, tests will now each take a whole number of seconds each to finish instead of %g seconds\n", BENCHMARK_TIME);
 #endif
 
     time_t beginBenchmark;
 
     // This array stores the results of the benchmark
-    long int results[prodSize][iterSize][21];
+    long int results[PROD_SIZE][ITER_SIZE][TEST_OOM_RANGE][TEST_DIGIT_RANGE];
 
 
     // Begin testing
     // First loop to iterate through producing an estimate
-    for(int prodIndex = 0; prodIndex < prodSize; prodIndex++){
+    for(int prodIndex = 0; prodIndex < PROD_SIZE; prodIndex++){
         // Second loop to iterate through iterating on an estimate
-        for(int iterIndex = 0; iterIndex < iterSize; iterIndex++){
-            // Helper for storing results, more reliable than log10(input)
-            int inputIndex = 0; 
-
+        for(int iterIndex = 0; iterIndex < ITER_SIZE; iterIndex++){
             // Because the inverse square root method produces an estimate for the inverse square root,
             // a different set of functions is required to itareate over. They are contained in the
             // iterating function pointer array, but with an offset of 4 from their non-inverted counterparts
@@ -89,15 +104,18 @@ int main(){
             printf("%s with %s:\n", prodNames[prodIndex], iterNames[iterIndex]);
 #endif // DEBUG >= 2
 
-            // Third loop dictates what number to find the square root of
-            for(float input = 1E-10; input < 1E10; input *= 10){
+            // Third loop dictates what order of magnitude input should be in
+            for(int OOM = 0 - ((TEST_OOM_RANGE - 1) / 2); OOM <= ((TEST_OOM_RANGE - 1) / 2); OOM++){
+                // Fourht loop dictates what digit within OOM input should be
+                for(int digit = (10 / TEST_DIGIT_RANGE); digit < 10; digit += (10 / TEST_DIGIT_RANGE)){
+                    double input = (double)digit * pow(10, (double)OOM);
 
 #if DEBUG >= 3
-                printf("Testing %s with %s, calculating the square root of %f for %f seconds...\n", prodNames[prodIndex], iterNames[iterIndex], input, benchmarkTime);
+                printf("Testing %s with %s, calculating the square root of %f for %f seconds...\n", prodNames[prodIndex], iterNames[iterIndex], input, BENCHMARK_TIME);
 #endif // DEBUG >= 3
-                long int count = 0;
+                    long int count = 0;
 
-                // Begin benchmark
+                    // Begin benchmark
 #ifdef IS_UNIX 
                 struct timeval tval_before, tval_after, tval_result;
                 double timeSpent;
@@ -110,7 +128,7 @@ int main(){
                 timeSpent = (double)(long)tval_result.tv_sec + 
                     ((double)(long)tval_result.tv_usec) / (double)1000000;
 
-                while(timeSpent < benchmarkTime){
+                while(timeSpent < BENCHMARK_TIME){
                     gettimeofday(&tval_after, NULL);
                     timersub(&tval_after, &tval_before, &tval_result);
                     
@@ -118,35 +136,41 @@ int main(){
                         ((double)(long)tval_result.tv_usec) / (double)1000000;
 
 #else // ifdef IS_UNIX 
-                // Start time
-                time(&beginBenchmark);
-                float estimate, result;
-                while(difftime(time(NULL), beginBenchmark) < benchmarkTime){
+                    // Start time
+                    time(&beginBenchmark);
+                    float estimate, result;
+                    while(difftime(time(NULL), beginBenchmark) < (BENCHMARK_TIME)){
 #endif // ifdef IS_UNIX 
 
-                    estimate = (*producer) (input);
-                    result = (*iterator) (input, estimate);
-                    count++;
-                } // while(difftime ...
+                        estimate = (*producer) (input);
+                        result = (*iterator) (input, estimate);
+                        count++;
+                    } // while(difftime ...
 
-                //if(((result * result) / input) > 0.01f)
-                    printf("%s with %s for %.2e: %.2e (%.2e)\n", prodNames[prodIndex], iterNames[iterIndex], input, result, prodIndex != 3 ? (result * result) : ((1 / result) * (1 / result)));
-                
-                results[prodIndex][iterIndex][inputIndex++] = count;
+                    if(result == -1)
+                        printf("ERROR: %s with %s unable to properly produce estimate\n", prodNames[prodIndex], iterNames[iterIndex]);
+#if DEBUG >= 1
+                    else
+                        printf("%s with %s for %.2e: %.2e (%.2e)\n", prodNames[prodIndex], iterNames[iterIndex], input, result, prodIndex != 3 ? (result * result) : ((1 / result) * (1 / result)));
+#endif // if DEBUG >= 1
+
+                    results[prodIndex][iterIndex][OOM + ((TEST_OOM_RANGE - 1) / 2)][digit] = count;
 
 #if DEBUG >= 1
 #ifdef IS_UNIX
-                printf("%lf\n", timeSpent);
+                    printf("%lf\n", timeSpent);
 #else
-                double bmTime = difftime(time(NULL), beginBenchmark);
-                printf("%lf\n", bmTime);
+                    double bmTime = difftime(time(NULL), beginBenchmark);
+                    printf("%lf\n", bmTime);
 #endif // ifdef IS_UNIX
 #endif // if DEBUG >= 1
 
 #if DEBUG >= 2
-                printf("%c with %c on %.1e: %ld\n", prodNames[prodIndex][0], iterNames[iterIndex][0], input, count);
+                    printf("%c with %c on %.1e: %ld\n", prodNames[prodIndex][0], iterNames[iterIndex][0], input, count);
 #endif // if DEBUG >= 2
-            } // for(float input = 1E-10 ...
+
+                } // for(int digit = 0 ...
+            } // for(int OOM = 0 - ...
         } // for(int iterIndex = 0 ...
     } // for(int prodIndex = 0 ...
 
@@ -156,19 +180,21 @@ int main(){
     return 0;
 }
 
-void printResults(long int results[prodSize][iterSize][21]){
-    for(int prods = 0; prods < prodSize; prods++){
-        for(int iters = 0; iters < iterSize; iters++){
-            for(int oom = 0; oom < 21; oom++){
-                double input = pow(10, (double)(oom - 10));
-                printf("%c with %c (%.2e): %ld\n", prodNames[prods][0], iterNames[iters][0], input, results[prods][iters][oom]);
+void printResults(long int results[PROD_SIZE][ITER_SIZE][TEST_OOM_RANGE][TEST_DIGIT_RANGE]){
+    for(int prods = 0; prods < PROD_SIZE; prods++){
+        for(int iters = 0; iters < ITER_SIZE; iters++){
+            for(int OOM = 0 - ((TEST_OOM_RANGE - 1) / 2); OOM <= ((TEST_OOM_RANGE - 1) / 2); OOM++){
+                for(int digit = (10 / TEST_DIGIT_RANGE); digit < 10; digit += (10 / TEST_DIGIT_RANGE)){
+                    double input = (double)digit * pow(10, (double)OOM);
+                    printf("%c with %c (%.2e): %ld\n", prodNames[prods][0], iterNames[iters][0], input, results[prods][iters][OOM + ((TEST_OOM_RANGE - 1) / 2)][digit]);
+                }
             }
         }
     }
 }
 
 
-void printCSV(long int results[prodSize][iterSize][21]){
+void printCSV(long int results[PROD_SIZE][ITER_SIZE][TEST_OOM_RANGE][TEST_DIGIT_RANGE]){
     FILE* csv;
     csv = fopen("output.csv", "w+");
 
@@ -176,26 +202,28 @@ void printCSV(long int results[prodSize][iterSize][21]){
     fputs(",", csv);
 
     // Print out column headers
-    for(int prods = 0; prods < prodSize; prods++){
-        for(int iters = 0; iters < iterSize; iters++){
+    for(int prods = 0; prods < PROD_SIZE; prods++){
+        for(int iters = 0; iters < ITER_SIZE; iters++){
             fprintf(csv, "%s with %s,", prodNames[prods], iterNames[iters]);
         }
     }
     fputs("\n", csv);
 
     // Print row headers and data
-    for(int oom = 0; oom < 21; oom++){
-        // Print row header
-        double header = pow(10, (double)(oom - 10));
-        fprintf(csv, "%.2e,", header);
+    for(int OOM = 0 - ((TEST_OOM_RANGE - 1) / 2); OOM <= ((TEST_OOM_RANGE - 1) / 2); OOM++){
+        for(int digit = (10 / TEST_DIGIT_RANGE); digit < 10; digit += (10 / TEST_DIGIT_RANGE)){
+            // Print row header
+            double header = (double)digit * pow(10, (double)OOM);
+            fprintf(csv, "%.2e,", header);
         
-        // Print data
-        for(int prods = 0; prods < prodSize; prods++){
-            for(int iters = 0; iters < iterSize; iters++){
-                fprintf(csv, "%ld,", results[prods][iters][oom]);
+            // Print data
+            for(int prods = 0; prods < PROD_SIZE; prods++){
+                for(int iters = 0; iters < ITER_SIZE; iters++){
+                    fprintf(csv, "%ld,", results[prods][iters][OOM + ((TEST_OOM_RANGE - 1) / 2)][digit]);
+                }
             }
+            fputs("\n", csv);
         }
-        fputs("\n", csv);
     }
     fclose(csv);
 }

@@ -5,6 +5,7 @@ SOURCE = src/IteratingAnEstimate/goldschmidt.c\
 		 src/IteratingAnEstimate/halley.c\
 		 src/IteratingAnEstimate/lucas.c\
 		 src/IteratingAnEstimate/newton.c\
+		 src/IteratingAnEstimate/babylonian.c\
 \
 	     src/ProducingAnEstimate/floatingpoint.c\
 	     src/ProducingAnEstimate/inputOver.c\
