@@ -149,9 +149,9 @@ int main(){
 
                     if(result == -1){
                         printf("ERROR: %s with %s unable to properly produce estimate for %.2e\n", prodNames[prodIndex], iterNames[iterIndex], input);
-                        results[prodIndex][iterIndex][OOM + ((TEST_OOM_RANGE - 1) / 2)][digit] = count;
-                    }else{
                         results[prodIndex][iterIndex][OOM + ((TEST_OOM_RANGE - 1) / 2)][digit] = -1;
+                    }else{
+                        results[prodIndex][iterIndex][OOM + ((TEST_OOM_RANGE - 1) / 2)][digit] = count;
 #if DEBUG >= 1
                         printf("%s with %s for %.2e: %.2e (%.2e)\n", prodNames[prodIndex], iterNames[iterIndex], input, result, prodIndex != 3 ? (result * result) : ((1 / result) * (1 / result)));
 #endif // if DEBUG >= 2
