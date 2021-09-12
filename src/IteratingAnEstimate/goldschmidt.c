@@ -6,18 +6,22 @@
 
 float goldschmidt(float input, float estimate){
     double R, G, H, check;
+    int count = 0;
 
-    estimate = 1 / estimate;
+    //estimate = 1 / estimate;
     G = input * estimate;
     H = estimate / 2;
 
-    while(check < 0.9999f || check > 1.0001f){
+    while((check < 0.9999f || check > 1.0001f) && count < 100){
         R = 0.5 - G * H;
         G = G + G * R;
         H = H + H * R;
         check = (G * G) / input;
+        count++;
     }
-
+    if(count == 99)
+        return -1;
+    
     return G;
 }
 
