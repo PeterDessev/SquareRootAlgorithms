@@ -12,7 +12,7 @@
 
 #include "include/roots.h"
 
-#define DEBUG 0
+#define DEBUG 1
 
 // Array of functions for producing a guess
 #define PROD_SIZE 4
@@ -100,9 +100,9 @@ int main(){
             float(* producer)(float) = producing[prodIndex];
             float(* iterator)(float input, float estimate) = iterating[trueIterIndex];
 
-#if DEBUG >= 2
+#if DEBUG >= 3
             printf("%s with %s:\n", prodNames[prodIndex], iterNames[iterIndex]);
-#endif // DEBUG >= 2
+#endif // DEBUG >= 3
 
             // Third loop dictates what order of magnitude input should be in
             for(int OOM = 0 - ((TEST_OOM_RANGE - 1) / 2); OOM <= ((TEST_OOM_RANGE - 1) / 2); OOM++){
@@ -110,9 +110,9 @@ int main(){
                 for(int digit = (10 / TEST_DIGIT_RANGE); digit < 10; digit += (10 / TEST_DIGIT_RANGE)){
                     double input = (double)digit * pow(10, (double)OOM);
 
-#if DEBUG >= 3
+#if DEBUG >= 4
                 printf("Testing %s with %s, calculating the square root of %f for %f seconds...\n", prodNames[prodIndex], iterNames[iterIndex], input, BENCHMARK_TIME);
-#endif // DEBUG >= 3
+#endif // DEBUG >= 4
                     long int count = 0;
 
                     // Begin benchmark
@@ -147,27 +147,28 @@ int main(){
                         count++;
                     } // while(difftime ...
 
-                    if(result == -1)
-                        printf("ERROR: %s with %s unable to properly produce estimate\n", prodNames[prodIndex], iterNames[iterIndex]);
+                    if(result == -1){
+                        printf("ERROR: %s with %s unable to properly produce estimate for %.2e\n", prodNames[prodIndex], iterNames[iterIndex], input);
+                        results[prodIndex][iterIndex][OOM + ((TEST_OOM_RANGE - 1) / 2)][digit] = count;
+                    }else{
+                        results[prodIndex][iterIndex][OOM + ((TEST_OOM_RANGE - 1) / 2)][digit] = -1;
 #if DEBUG >= 1
-                    else
                         printf("%s with %s for %.2e: %.2e (%.2e)\n", prodNames[prodIndex], iterNames[iterIndex], input, result, prodIndex != 3 ? (result * result) : ((1 / result) * (1 / result)));
-#endif // if DEBUG >= 1
+#endif // if DEBUG >= 2
+                    }
 
-                    results[prodIndex][iterIndex][OOM + ((TEST_OOM_RANGE - 1) / 2)][digit] = count;
-
-#if DEBUG >= 1
+#if DEBUG >= 2
 #ifdef IS_UNIX
                     printf("%lf\n", timeSpent);
 #else
                     double bmTime = difftime(time(NULL), beginBenchmark);
-                    printf("%lf\n", bmTime);
+                    printf("Time: %lf\n", bmTime);
 #endif // ifdef IS_UNIX
-#endif // if DEBUG >= 1
-
-#if DEBUG >= 2
-                    printf("%c with %c on %.1e: %ld\n", prodNames[prodIndex][0], iterNames[iterIndex][0], input, count);
 #endif // if DEBUG >= 2
+
+#if DEBUG >= 3
+                    printf("%c with %c on %.1e: %ld\n", prodNames[prodIndex][0], iterNames[iterIndex][0], input, count);
+#endif // if DEBUG >= 3
 
                 } // for(int digit = 0 ...
             } // for(int OOM = 0 - ...
