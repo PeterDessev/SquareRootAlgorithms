@@ -10,7 +10,8 @@
         "lucas.h": "c",
         "halley.h": "c",
         "oneasanestimate.h": "c",
-        "math.h": "c"
+        "math.h": "c",
+        "babylonian.h": "c"
     },
     "C_Cpp.errorSquiggles": "Enabled"
 }
