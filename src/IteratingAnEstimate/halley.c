@@ -23,8 +23,8 @@ float halleyInverse(float input, float estimate){
 
     while(check < 0.9999 || check > 1.0001){
         estimateSquared = estimate * estimate;
-        numerator = -1 * estimateSquared * estimate * input - 3 * estimate;
-        denominator = -3 * estimateSquared * input - 1;
+        numerator = estimateSquared * estimate * input + 3 * estimate;
+        denominator = 3 * estimateSquared * input + 1;
 
         estimate = (numerator / denominator);
     
