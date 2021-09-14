@@ -75,8 +75,6 @@ static void printResults(long int results[PROD_SIZE][ITER_SIZE][TEST_OOM_RANGE][
 static void printCSV(long int results[PROD_SIZE][ITER_SIZE][TEST_OOM_RANGE][TEST_DIGIT_RANGE]);
 
 int main(){
-
-
 #ifndef IS_UNIX
     printf("Unable to locate posix libraries, tests will now each take a whole number of seconds each to finish instead of %g seconds\n", BENCHMARK_TIME);
 #endif
