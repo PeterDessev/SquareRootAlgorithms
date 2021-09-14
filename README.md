@@ -3,7 +3,7 @@
 A testing program for several different methods of computing square roots in software.
 
 ## Paper
-The paper to go along with this study is available here:
+The paper to go along with this program is available here:
 
 https://docs.google.com/document/d/1e1kNdTjHdQQyEId8orjOof3VnSAWD3e5kDFTlawNjvI/edit?usp=sharing
 
