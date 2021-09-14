@@ -43,9 +43,9 @@ Algorithms that iterate on a guess function on a loop. The loop continually runs
 - Halley's Method
 - Newton's Method
 
-## Output
+## Results
 
-By default, the data is output to a CSV file, however, data can also be printed or output raw in a text file.
+By default, the results are output to a CSV file, however, data can also be printed or output raw in a text file.
 
 ## Debug
 
