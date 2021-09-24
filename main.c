@@ -15,6 +15,8 @@
 #define DEBUG 1
 
 // Array of functions for producing a guess
+// IMPORTANT: inverseSquare MUST be the last element
+// in the array
 #define PROD_SIZE 4
 static float(* producing[PROD_SIZE]) (float input) = {
     inputOver,
@@ -93,7 +95,7 @@ int main(){
             // Because the inverse square root method produces an estimate for the inverse square root,
             // a different set of functions is required to itareate over. They are contained in the
             // iterating function pointer array, but with an offset of 4 from their non-inverted counterparts
-            int trueIterIndex = prodIndex == 3 ? iterIndex + 3 : iterIndex;
+            int trueIterIndex = prodIndex == (PROD_SIZE - 1) ? iterIndex + ITER_SIZE : iterIndex;
             
             float(* producer)(float) = producing[prodIndex];
             float(* iterator)(float input, float estimate) = iterating[trueIterIndex];
@@ -107,11 +109,11 @@ int main(){
                 // Fourht loop dictates what digit within OOM input should be
                 for(int digit = (10 / TEST_DIGIT_RANGE); digit < 10; digit += (10 / TEST_DIGIT_RANGE)){
                     double input = (double)digit * pow(10, (double)OOM);
-
+                    long int count = 0;
+                    char check;
 #if DEBUG >= 4
                 printf("Testing %s with %s, calculating the square root of %f for %f seconds...\n", prodNames[prodIndex], iterNames[iterIndex], input, BENCHMARK_TIME);
 #endif // DEBUG >= 4
-                    long int count = 0;
 
                     // Begin benchmark
 #ifdef IS_UNIX 
@@ -144,9 +146,14 @@ int main(){
                         result = (*iterator) (input, estimate);
                         count++;
                     } // while(difftime ...
+                    check = iterIndex == trueIterIndex ? 
+                        fabs(1 - (result * result) / input) > 0.1f :
+                        fabs(1 - result * result * input) > 0.1f;
 
-                    if(result == -1){
+                    if(result == -1 || check){
+#if DEBUG >= 0
                         printf("ERROR: %s with %s unable to properly produce estimate for %.2e\n", prodNames[prodIndex], iterNames[iterIndex], input);
+#endif //   if DEBUG >= 0
                         results[prodIndex][iterIndex][OOM + ((TEST_OOM_RANGE - 1) / 2)][digit] = -1;
                     }else{
                         results[prodIndex][iterIndex][OOM + ((TEST_OOM_RANGE - 1) / 2)][digit] = count;
