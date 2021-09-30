@@ -58,4 +58,6 @@ squareRoots
 *.csv#
 *.ods
 *.ods#
-.vscode/settings.json
+
+# Vscode configuration files
+.vscode/
