@@ -1,5 +1,3 @@
-#include <stdio.h>
-
 #include "IteratingAnEstimate/newton.h"
 
 float newton(float input, float estimate){
