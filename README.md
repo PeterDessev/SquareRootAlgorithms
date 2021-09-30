@@ -43,10 +43,7 @@ Algorithms that iterate on a guess function on a loop. The loop continually runs
 - Halley's Method
 - Newton's Method
 
-## Results
 
-By default, the results are output to a CSV file, however, data can also be printed or output raw in a text file.
+## Customization
 
-## Debug
-
-By default the DEBUG flag in `main.c` is set to 0. This means that only when an algorithm does not properly compute the square root will a message be printed in standard out. Setting the DEBUG flag to 1 will print both errors and results of algorithms that successfully computed the square root. DEBUG levels 2-4 send extra information to standard out that are either redundant or not useful to the end user.
+Most of the testing parameters can be modified in the include/parameters.h and src/paraemters.c files
