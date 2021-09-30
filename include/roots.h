@@ -1,3 +1,5 @@
+#pragma once
+
 // Producing algorithms
 #include "ProducingAnEstimate/floatingpoint.h"
 #include "ProducingAnEstimate/inverseSquare.h"
