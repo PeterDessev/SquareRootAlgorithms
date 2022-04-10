@@ -5,7 +5,7 @@ A testing program for several different methods of computing square roots in sof
 ## Paper
 The paper to go along with this program is available here:
 
-https://docs.google.com/document/d/1e1kNdTjHdQQyEId8orjOof3VnSAWD3e5kDFTlawNjvI/edit?usp=sharing
+https://docs.google.com/document/d/1aGCRhi2Cv1Dikgq-pWDK3uEog6NLN1r-RY6air4I0K4/edit?usp=sharing
 
 While reading is not required to understand any of the program, it still offers insights into the math behind each algorithm, and anaylsis on the results
 
