@@ -1,6 +1,6 @@
 CC = clang
 
-CFLAGS = -Iinclude/ -Wno-unknown-pragmas -lm -O3
+CFLAGS = -Iinclude/ -Wno-unknown-pragmas
 SOURCE = src/IteratingAnEstimate/goldschmidt.c\
 		 src/IteratingAnEstimate/halley.c\
 		 src/IteratingAnEstimate/newton.c\
@@ -17,7 +17,7 @@ SOURCE = src/IteratingAnEstimate/goldschmidt.c\
 
 OBJECTS = $(SOURCE:.c=.o)
 
-COMPILE = $(CC) -Wall $(CFLAGS)
+COMPILE = $(CC) -Wall -lm $(CFLAGS)
 OUTPUT = squareRoots
 
 all: $(OBJECTS)
